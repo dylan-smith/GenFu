@@ -7,6 +7,7 @@ namespace GenFu
 {
     public class GenericFillerDefaults
     {
+        private int foo;
         private FillerManager _fillerManager;
         public GenericFillerDefaults(FillerManager fillerManager)
         {
