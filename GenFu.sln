@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenFu", "src\GenFu\GenFu.cs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenFu.Web", "src\GenFu.Web\GenFu.Web.csproj", "{A95F4BDE-6A64-45CC-A993-FEEC3B639F60}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenFu.HtmlHelpers", "GenFu.HtmlHelpers\GenFu.HtmlHelpers.csproj", "{2C5E950E-FA63-476D-A58C-A7646E742E2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenFu.HtmlHelpers", "src\GenFu.HtmlHelpers\GenFu.HtmlHelpers.csproj", "{2C5E950E-FA63-476D-A58C-A7646E742E2B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenFu.Tests", "tests\GenFu.Tests\GenFu.Tests.csproj", "{A80A162C-939C-4318-92DE-78276D09DD94}"
 EndProject
