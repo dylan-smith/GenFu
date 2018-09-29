@@ -8,6 +8,9 @@ namespace GenFu
 {
     public class A : GenFu { }
     
+    // TODO: Make htis awesome
+    // if (x == true) { var foo = 12 }
+    
 
     public class Eh : GenFu { }
 
