@@ -14,6 +14,7 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <ProjectGuid>{3200BC93-199E-40F9-B17A-515A8CA51C5D}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>

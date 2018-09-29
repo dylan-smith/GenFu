@@ -22,6 +22,7 @@
     <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
     <Version>1.0.2</Version>
     <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <ProjectGuid>{CACE8B78-679D-45DE-97FD-9694868E66CF}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
