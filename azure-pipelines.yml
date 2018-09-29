@@ -1,19 +1,105 @@
-# ASP.NET Core
-# Build and test ASP.NET Core web applications targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/vsts/pipelines/languages/dotnet-core
-
-pool:
-  vmImage: 'VS2017-Win2016'
+queue:
+  name: Hosted VS2017
+  demands: java
 
 variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration) src/GenFu.sln
-  displayName: 'dotnet build $(buildConfiguration)'
-  
-- script: dotnet pack --configuration $(buildConfiguration) src/GenFu/GenFu.csproj -o $(build.ArtifactStagingDirectory)
-  displayName: 'dotnet pack $(buildConfiguration)'
+- task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
+  displayName: 'Prepare analysis on SonarCloud'
+  inputs:
+    SonarCloud: 'GenFu-SonarCloud'
+
+    organization: 'dysmith-microsoft-com-microsoft'
+
+    projectKey: dylan.genfu
+
+    projectName: GenFu
+
+    extraProperties: |
+     # Additional properties that will be passed to the scanner, 
+     # Put one key=value per line, example:
+     # sonar.exclusions=**/*.bin
+     sonar.exclusions=**/wwwroot/**
+     sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)\TestResults\Coverage\coverage.opencover.xml
+
+
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: GenFu.sln
+    vstsFeed: '86be5ea6-307b-4a4a-8a45-117e904a7b66'
+    includeNuGetOrg: false
+    verbosityRestore: Normal
+
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    projects: GenFu.sln
+    arguments: '--configuration $(BuildConfiguration)'
+
+
+- task: DotNetCoreCLI@2
+  displayName: Pack
+  inputs:
+    command: pack
+    packagesToPack: src/GenFu/GenFu.csproj
+    nobuild: true
+    versioningScheme: byBuildNumber
+    verbosityPack: Normal
+
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: test
+    projects: tests/GenFu.Tests/GenFu.Tests.csproj
+    arguments: '--configuration $(BuildConfiguration) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat="cobertura%2copencover" /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\'
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'Generate Coverage Report'
+  inputs:
+    command: custom
+    projects: tests/GenFu.Tests/GenFu.Tests.csproj
+    custom: reportgenerator
+    arguments: '-reports:$(Build.SourcesDirectory)\TestResults\Coverage\coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)\TestResults\Coverage\Reports -tag:$(Build.BuildNumber) -reportTypes:htmlInline'
+    workingDirectory: tests/GenFu.Tests
+
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(Build.SourcesDirectory)\TestResults\Coverage\**\coverage.cobertura.xml'
+    reportDirectory: '$(Build.SourcesDirectory)\TestResults\Coverage\Reports\'
+    failIfCoverageEmpty: true
+
+
+- task: CopyFiles@2
+  displayName: 'Copy Test Results'
+  inputs:
+    SourceFolder: '$(agent.tempdirectory)'
+    Contents: '*.trx'
+    TargetFolder: '$(agent.builddirectory)/TestResults'
+
+
+- task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
+  displayName: 'Run Code Analysis'
+
+
+- task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
+  displayName: 'Publish Quality Gate Result'
+
+
+- task: whitesource.ws-bolt.bolt.wss.WhiteSource Bolt@1
+  displayName: 'WhiteSource Bolt'
+
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: nuget'
+  inputs:
+    ArtifactName: nuget
