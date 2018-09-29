@@ -44,4 +44,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
+  <ItemGroup>
+    <DotNetCliToolReference Include="dotnet-reportgenerator-cli" Version="4.0.0-rc6" />
+  </ItemGroup>
 </Project>
