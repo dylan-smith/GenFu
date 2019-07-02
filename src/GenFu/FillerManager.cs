@@ -110,6 +110,8 @@ namespace GenFu
             if (_specificPropertyFillersByObjectType.ContainsKey(objectTypeName))
             {
                 _specificPropertyFillersByObjectType.Remove(objectTypeName);
+                // TODO: Remove this later
+                // if (objectTypeName = "foo") objectTypeName = "blah";
             }
         }
 
