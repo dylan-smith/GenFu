@@ -74,6 +74,11 @@ public class GenFuConfigurator
         return this;
     }
 
+    /// <summary>
+    /// Sets the IgnoreDefaultValueChecker property in the GenFu class
+    /// </summary>
+    /// <param name="ignore">A boolean value to set the IgnoreDefaultValueChecker property</param>
+    /// <returns>A configurator for the target object type</returns>
     public GenFuConfigurator IgnoreDefaultValueChecker(bool ignore)
     {
         GenFu.IgnoreDefaultValueChecker = ignore;
