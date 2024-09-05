@@ -598,4 +598,22 @@ public class When_generating
 
         Assert.NotNull(person.FirstName);
     }
+
+    [Fact]
+    public void Should_fill_property_even_if_already_filled_when_ignore_default_value_checker_is_true()
+    {
+        GenFu.Reset();
+        GenFu.Configure<BlogPost>().IgnoreDefaultValueChecker(true).Fill(x => x.Tags, () => new List<string> { "default" });
+        var result = A.New<BlogPost>();
+        Assert.Equal("default", result.Tags.Single());
+    }
+
+    [Fact]
+    public void Should_not_fill_property_if_already_filled_when_ignore_default_value_checker_is_false()
+    {
+        GenFu.Reset();
+        GenFu.Configure<BlogPost>().IgnoreDefaultValueChecker(false).Fill(x => x.Tags, () => new List<string> { "default" });
+        var result = A.New<BlogPost>();
+        Assert.Empty(result.Tags);
+    }
 }

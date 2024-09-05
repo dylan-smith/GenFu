@@ -24,6 +24,8 @@ public partial class GenFu
         Random = new Random();
     }
 
+    public static bool IgnoreDefaultValueChecker { get; set; } = false; // P7ffb
+
     public static T New<T>() where T : new()
     {
         return (T)New(typeof(T));
@@ -54,7 +56,7 @@ public partial class GenFu
             TypeInfo typeInfo = type.GetTypeInfo();
             foreach (var property in typeInfo.GetAllProperties())
             {
-                if (!DefaultValueChecker.HasValue(instance, property) && property.CanWrite)
+                if ((IgnoreDefaultValueChecker || !DefaultValueChecker.HasValue(instance, property)) && property.CanWrite) // P13e3
                 {
                     SetPropertyValue(instance, property);
                 }
@@ -253,6 +255,3 @@ public partial class GenFu
 
 
 }
-
-
-

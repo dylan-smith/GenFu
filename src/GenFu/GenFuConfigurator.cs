@@ -74,6 +74,12 @@ public class GenFuConfigurator
         return this;
     }
 
+    public GenFuConfigurator IgnoreDefaultValueChecker(bool ignore)
+    {
+        GenFu.IgnoreDefaultValueChecker = ignore;
+        return this;
+    }
+
     public GenFu GenFu
     {
         get { return _genfu; }
